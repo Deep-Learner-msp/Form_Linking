@@ -17,7 +17,7 @@ python form_linking.py -i {image_file}
 
 
 ### Output
-```json
+```
 
 {'DATE;': '2-23-2019',
  'DATE': '2-23-2019',

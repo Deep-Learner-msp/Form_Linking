@@ -27,5 +27,5 @@ python form_linking.py -i {image_file}
  'EMAIL:': 'SALES@XYZ.COM',
  'WEB:': 'WWW.XYZ.COM',
  'AMOUNT DUE:': '$882 USD',
- 'PAYMENT DUE BY:': '| 2-28-2019'}
+ 'PAYMENT DUE BY:': '2-28-2019'}
  ```

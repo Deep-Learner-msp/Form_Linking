@@ -11,7 +11,7 @@ python form_linking.py -i {image_file}
 
 ## Examples
 
-![Alt text](/Form_Linking/examples/key_value_doc.jpeg?raw=true "Title")
+![Alt text](https://github.com/Deep-Learner-msp/Form_Linking/blob/main/examples/key_value_doc.jpeg "Title")
 
 
 

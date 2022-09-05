@@ -6,7 +6,8 @@ Form Linking uses SOTA Layoutlm (Dual modality) Models to generate automatic Lab
 ## Usage
 
 ```
-python form_linking.py -i {image_file}
+1.pip install -r requirements.txt
+2.python form_linking.py -i {image_file}
 ```
 
 ## Examples

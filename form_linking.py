@@ -1,30 +1,13 @@
 import os
 print("Installing tesseract on machine")
-
 os.system('apt-get install tesseract-ocr -y')
-
 print("tesseract should be installed")
 
-os.system('pip install gradio --upgrade')
-os.system('pip install git+https://github.com/huggingface/transformers.git --upgrade')
-os.system('pip install pyyaml==5.1')
-# workaround: install old version of pytorch since detectron2 hasn't released packages for pytorch 1.9 (issue: https://github.com/facebookresearch/detectron2/issues/3158)
-os.system('pip install torch==1.8.0+cu101 torchvision==0.9.0+cu101 -f https://download.pytorch.org/whl/torch_stable.html')
-# install detectron2 that matches pytorch 1.8
-# See https://detectron2.readthedocs.io/tutorials/install.html for instructions
-os.system('pip install -q detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.8/index.html')
-## install PyTesseract
-os.system('pip install -q pytesseract')
-
-
 import time
-import numpy as np
 from transformers import LayoutLMv2Processor, LayoutLMv2ForTokenClassification,LayoutLMv2FeatureExtractor
 from datasets import load_dataset
 from PIL import Image, ImageDraw, ImageFont
-import uuid
 import argparse
-
 
 dataset = load_dataset("nielsr/funsd", split="test")
 
@@ -131,7 +114,8 @@ def parsing(true_predictions,token_boxes,bbdict):
 
 
 def main(image):
-  
+
+  image = image.convert("RGB")
   width, height = image.size
   features = feature_extractor(image, return_tensors="pt")
   words,boxes=features['words'][0],features['boxes'][0]
@@ -165,7 +149,7 @@ def main(image):
       draw.rectangle(box, outline=label2color[predicted_label])
       draw.text((box[0]+10, box[1]-10), text=predicted_label, fill=label2color[predicted_label], font=font)
   output,cluster_master=parsing(true_predictions,token_boxes,bbdict)
-  filename = str(uuid.uuid4())+'.jpg'
+  filename = str(image.filename.split('/')[-1].split('.')[0]) + '_annotated' + '.jpg'
   image.save(filename)
   return output
 
@@ -173,26 +157,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", type=str, required=True, help='Input Image')
     args = parser.parse_args()
-    im = Image.open(args.i).convert("RGB")
+    im = Image.open(args.i)
     main(im)
-
-
-
-# import gradio as gr
-
-# title = "Interactive demo: LayoutLMv2"
-# description = "Demo for Microsoft's LayoutLMv2, a Transformer for state-of-the-art document image understanding tasks. This particular model is fine-tuned on FUNSD, a dataset of manually annotated forms. It annotates the words into QUESTION/ANSWER/HEADER/OTHER. To use it, simply upload an image or use the example image below. Results will show up in a few seconds."
-# article = "<p style='text-align: center'><a href='https://arxiv.org/abs/2012.14740'>LayoutLMv2: Multi-modal Pre-training for Visually-Rich Document Understanding</a> | <a href='https://github.com/microsoft/unilm'>Github Repo</a></p>"
-# examples =[['document.png']]
-
-# css = """.output_image, .input_image {height: 600px !important}"""
-
-# iface = gr.Interface(fn=run, 
-#                      inputs=gr.inputs.Image(type="pil"), 
-#                      outputs=gr.outputs.KeyValues( label='key value pairs'),
-#                      title=title,
-#                      description=description,
-#                      article=article,
-#                      css=css)
-# iface.launch(debug=True,share=True)
-

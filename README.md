@@ -12,10 +12,9 @@ DoSA uses tesseract as OCR Engine. Please install it and set the path before run
 brew install tesseract
 ```
 - On Windows
-```
 Download [tesseract]<a href="https://sourceforge.net/projects/tesseract-ocr-alt/files/"></a>
 
-```
+
 ## python package dependncies
 
 ```

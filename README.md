@@ -3,6 +3,15 @@
 
 Form Linking uses SOTA Layoutlm (Dual modality) Models to generate automatic Labelling/Annotations for Key value pairs on different types of documents.
 
+## Installation of tesseract
+```
+### Linux
+sudo apt install tesseract-ocr -y
+### MacOS
+brew install tesseract
+## Windows
+Download tesseract from https://digi.bib.uni-mannheim.de/tesseract/ and add into the System Environment Variables
+
 ## Usage
 
 ```

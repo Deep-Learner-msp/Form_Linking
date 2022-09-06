@@ -14,9 +14,8 @@ sudo apt install tesseract-ocr -y
 brew install tesseract
 ```
 ### **Windows**
-```
-Download **[command line usage](https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html)** and add into the System Environment Variables
-```
+Download **[tesseract](https://tesseract-ocr.github.io/tessdoc/Downloads.html)** and add into the System Environment Variables
+
 ## Usage
 
 ```

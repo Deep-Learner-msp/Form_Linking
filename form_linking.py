@@ -1,8 +1,3 @@
-import os
-print("Warning:Installing tesseract on machine")
-os.system('apt-get install tesseract-ocr -y')
-print("tesseract should be installed")
-
 import time
 from transformers import LayoutLMv2Processor, LayoutLMv2ForTokenClassification,LayoutLMv2FeatureExtractor
 from datasets import load_dataset
@@ -168,7 +163,7 @@ def main(img):
 
     # draw predictions over the image
   draw = ImageDraw.Draw(image)
-  font = ImageFont.truetype("/Users/mspraja/Downloads/arial/arial.ttf", 10, encoding="unic")
+  font = ImageFont.truetype("arial/arial.ttf", 10, encoding="unic")
   for prediction, box in zip(true_predictions, true_boxes):
       predicted_label = iob_to_label(prediction).lower()
       if predicted_label != 'other' and predicted_label !='header' :

@@ -163,7 +163,7 @@ def main(img):
 
     # draw predictions over the image
   draw = ImageDraw.Draw(image)
-  font = ImageFont.truetype("arial/arial.ttf", 10, encoding="unic")
+  font = ImageFont.truetype("utils/arial/arial.ttf", 10, encoding="unic")
   for prediction, box in zip(true_predictions, true_boxes):
       predicted_label = iob_to_label(prediction).lower()
       if predicted_label != 'other' and predicted_label !='header' :

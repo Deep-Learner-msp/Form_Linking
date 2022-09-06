@@ -5,11 +5,11 @@ Form Linking uses SOTA Layoutlm (Dual modality) Models to generate automatic Lab
 
 ## Installation of tesseract
 ```
-Linux
+###**Linux**
 sudo apt install tesseract-ocr -y
-MacOS
+###**MacOS**
 brew install tesseract
-Windows
+###**Windows**
 Download tesseract from https://digi.bib.uni-mannheim.de/tesseract/ and add into the System Environment Variables
 ```
 ## Usage

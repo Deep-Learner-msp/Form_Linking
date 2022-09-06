@@ -1,8 +1,3 @@
-import os
-print("Warning:Installing tesseract on machine")
-os.system('apt-get install tesseract-ocr -y')
-print("tesseract should be installed")
-
 import time
 from transformers import LayoutLMv3Processor, LayoutLMv3ForTokenClassification, LayoutLMv3FeatureExtractor
 from datasets import load_dataset

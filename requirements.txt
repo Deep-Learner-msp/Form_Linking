@@ -4,7 +4,7 @@ numpy
 datasets
 transformers
 pyyaml==5.1
-torch==1.8.0+cu101 
-torchvision==0.9.0+cu101
-'git+https://github.com/facebookresearch/detectron2.git'
 pytesseract
+torch==1.8.0 
+torchvision==0.9.0
+git+https://github.com/facebookresearch/detectron2.git

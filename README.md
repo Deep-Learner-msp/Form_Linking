@@ -15,7 +15,7 @@ brew install tesseract
 ```
 ### **Windows**
 ```
-Download [tesseract](https://digi.bib.uni-mannheim.de/tesseract/) and add into the System Environment Variables
+Download **[command line usage](https://tesseract-ocr.github.io/tessdoc/Command-Line-Usage.html)** and add into the System Environment Variables
 ```
 ## Usage
 

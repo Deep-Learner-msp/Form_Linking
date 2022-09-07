@@ -1,50 +1,35 @@
 
-# Form Linking
+# DoSA: (Do)cument (S)pecific Automated Annotations
 
-Form Linking uses SOTA Layoutlm (Dual modality) Models to generate automatic Labelling/Annotations for Key value pairs on different types of documents.
+we are proposing an active learning based automated annotation system DoSA (Document Specific Automated Annotations), where initials annotations are given to train a model which can be later be improved with more number of annotations. But rather than involving user at initial stage of manual annotations, we are proposing a novel approach of automatic annotations and using the model feedback in generating new annotations. 
 
-## Installation of tesseract
+## Software Dependency
 
-### **Linux**
-```
-sudo apt install tesseract-ocr -y
-```
-### **MacOS**
+DoSA uses tesseract as OCR Engine. Please install it and set the path before running this system
+
+- On MacOS
 ```
 brew install tesseract
 ```
-### **Windows**
-Download **[tesseract](https://tesseract-ocr.github.io/tessdoc/Downloads.html)** and add into the System Environment Variables
+- On Windows
+Download [tesseract](https://sourceforge.net/projects/tesseract-ocr-alt/files/) and add to the path
 
-## Usage
+
+## python package dependncies
 
 ```
-1.pip install -r requirements.txt
-2.python form_linking.py -i {image_file}
+pip install -r requirements.txt
 ```
 
-## Examples
+## Generating annotation image
 
-#### Original_reciept                                                                                         
-![Alt text](https://github.com/Deep-Learner-msp/Form_Linking/blob/main/examples/key_value_doc.jpeg "reciept") 
-#### KEY_VALUE_Classification 
-![Alt text](https://github.com/Deep-Learner-msp/Form_Linking/blob/main/results/Funsd_results/key_value_image_annotated.jpeg "funsd_key_value_classification")
-#### Value_Mapping with Key
-![Alt text](https://github.com/Deep-Learner-msp/Form_Linking/blob/main/results/Post_Process_results/key_value_doc_annotated.png "labelled values with keys")
-
-
-
-
-### Output
+```
+python generate_annotations.py -i <image_file>
 ```
 
-{'DATE;': '2-23-2019',
- 'DATE': '2-23-2019',
- 'TIME:': '17:30:22',
- 'INVOICE #:': '7124',
- 'PHONE:': '123-456-7890',
- 'EMAIL:': 'SALES@XYZ.COM',
- 'WEB:': 'WWW.XYZ.COM',
- 'AMOUNT DUE:': '$882 USD',
- 'PAYMENT DUE BY:': '2-28-2019'}
- ```
+
+Example:
+
+```
+python generate_annotations.py -i examples/82092117.png
+```

@@ -1,5 +1,5 @@
 import time
-from transformers import LayoutLMv2Processor, LayoutLMv2ForTokenClassification,LayoutLMv2FeatureExtractor
+from transformers import LayoutLMv3Processor, LayoutLMv3ForTokenClassification, LayoutLMv3FeatureExtractor
 from datasets import load_dataset
 from PIL import Image, ImageDraw, ImageFont
 import argparse
@@ -14,9 +14,9 @@ l2l = {'question':'key', 'answer':'value', 'header':'title'}
 f_labels = {'question':'key', 'answer':'value', 'header':'title', 'other':'others'}
 
 
-processor = LayoutLMv2Processor.from_pretrained("microsoft/layoutlmv2-base-uncased", revision="no_ocr")
-model = LayoutLMv2ForTokenClassification.from_pretrained("nielsr/layoutlmv2-finetuned-funsd",ignore_mismatched_sizes = True)
-feature_extractor = LayoutLMv2FeatureExtractor()
+processor = LayoutLMv3Processor.from_pretrained("microsoft/layoutlmv3-base", apply_ocr=False)
+model = LayoutLMv3ForTokenClassification.from_pretrained("nielsr/layoutlmv3-finetuned-funsd",ignore_mismatched_sizes = True)
+feature_extractor = LayoutLMv3FeatureExtractor()
 
 def iob_to_label(label):
     label = label[2:]
@@ -152,7 +152,7 @@ def main(img):
   start=time.time()
   encoding = processor(image, words, boxes=boxes, return_tensors="pt")
   outputs = model(**encoding)
-  print(time.time()-start,'Results Exported Sucessfully')
+  print('Results Exported Sucessfully at results/final_annotated')
 
 
   # get predictions
@@ -163,23 +163,24 @@ def main(img):
 
     # draw predictions over the image
   draw = ImageDraw.Draw(image)
-  font = ImageFont.truetype("utils/arial/arial.ttf", 10, encoding="unic")
+
+  font = ImageFont.truetype("tools/arial/arial.ttf", 10, encoding="unic")
   for prediction, box in zip(true_predictions, true_boxes):
       predicted_label = iob_to_label(prediction).lower()
       if predicted_label != 'other' and predicted_label !='header' :
           draw.rectangle(box, outline=label2color[predicted_label])
-          draw.text((box[0]+10, box[1]-10), f_labels[predicted_label], fill=label2color[predicted_label], font=font)
+          draw.text((box[0]+10, box[1]-10), f_labels[predicted_label], fill=label2color[predicted_label])
       else:
         continue
   output,cluster_master=parsing(true_predictions,token_boxes,bbdict)
  ## saving output key value dict as json file
   json_name = str(im.filename.split('/')[-1].split('.')[0])+'_key_value'+'.json'
-  with open(os.path.join('results/json_results/',json_name), 'w') as fp:
+  with open(os.path.join('results/json_output/',json_name), 'w') as fp:
     json.dump(output, fp)
 ## saving funsd annnotated image
   
   filename = str(im.filename.split('/')[-1].split('.')[0])+'_annotated'+'.jpeg'
-  image.save(os.path.join('results/Funsd_results',filename))
+  image.save(os.path.join('results/funsd_output',filename))
 
   key_boxes = []
   for item in cluster_master:
@@ -203,11 +204,11 @@ def main(img):
   for item in key_box.items():
     box = unnormalize_box(item[1]['box'],width,height)
     draw.rectangle(box, outline='green')
-    draw.text((box[0]+10, box[1]-10), item[0], font=font, outline='green')
-    filename =  str(im.filename.split('/')[-1].split('.')[0])+'_post_processed'+'.jpg'
+    draw.text((box[0]+10, box[1]-10), item[0], outline='green', font=font)
+    filename =  str(im.filename.split('/')[-1].split('.')[0])+'_annotated'+'.jpg'
     ## saving post processed annnotated image
 
-    im.save((os.path.join('results/Post_Process_results',filename)))
+    im.save((os.path.join('results/final_annotated',filename)))
 
          
   return img,output

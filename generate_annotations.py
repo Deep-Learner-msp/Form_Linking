@@ -1,8 +1,10 @@
 import time
+from numpy import imag
 from transformers import LayoutLMv3Processor, LayoutLMv3ForTokenClassification, LayoutLMv3FeatureExtractor
 from datasets import load_dataset
 from PIL import Image, ImageDraw, ImageFont
 import argparse
+import os
 
 dataset = load_dataset("nielsr/funsd", split="test")
 
@@ -140,17 +142,17 @@ def con_coordinates(lst):
 
 def main(img):
     
-  image = img.convert("RGB")
+  image_1 = img.convert("RGB")
   
-  width, height = image.size
-  features = feature_extractor(image, return_tensors="pt")
+  width, height = image_1.size
+  features = feature_extractor(image_1, return_tensors="pt")
   words,boxes=features['words'][0],features['boxes'][0]
 
   bbdict=dict()
   for word,box in zip(words,boxes):
     bbdict[str(box)]=word
   start=time.time()
-  encoding = processor(image, words, boxes=boxes, return_tensors="pt")
+  encoding = processor(image_1, words, boxes=boxes, return_tensors="pt")
   outputs = model(**encoding)
   print('Results Exported Sucessfully at results/final_annotated')
 
@@ -162,7 +164,7 @@ def main(img):
   true_boxes = [unnormalize_box(box, width, height) for idx, box in enumerate(token_boxes)]
 
     # draw predictions over the image
-  draw = ImageDraw.Draw(image)
+  draw = ImageDraw.Draw(image_1)
 
   font = ImageFont.truetype("tools/arial/arial.ttf", 10, encoding="unic")
   for prediction, box in zip(true_predictions, true_boxes):
@@ -180,7 +182,7 @@ def main(img):
 ## saving funsd annnotated image
   
   filename = str(im.filename.split('/')[-1].split('.')[0])+'_annotated'+'.jpeg'
-  image.save(os.path.join('results/funsd_output',filename))
+  image_1.save(os.path.join('results/funsd_output',filename))
 
   key_boxes = []
   for item in cluster_master:
@@ -200,15 +202,18 @@ def main(img):
     prevtyp=typ
     prevx=x
     prevy=y
-  draw = ImageDraw.Draw(img)
+  
+  image_2 = img.convert("RGB")
+  draw = ImageDraw.Draw(image_2)
+  width,height = image_2.size
   for item in key_box.items():
     box = unnormalize_box(item[1]['box'],width,height)
     draw.rectangle(box, outline='green')
-    draw.text((box[0]+10, box[1]-10), item[0], outline='green', font=font)
+    draw.text((box[0]+10, box[1]-10), item[0], outline='green', fill='red',font=font)
     filename =  str(im.filename.split('/')[-1].split('.')[0])+'_annotated'+'.jpg'
     ## saving post processed annnotated image
 
-    im.save((os.path.join('results/final_annotated',filename)))
+    image_2.save((os.path.join('results/final_annotated',filename)))
 
          
   return img,output
